@@ -3,17 +3,14 @@
  */
 
 import React, {Component, TextInput, Image, StyleSheet, View} from 'react-native';
-export default class SearchBar extends Component {
+export default function  SearchBar(){
 
-    render() {
         var def="Search by title or tag..."
         let {container, text}=styles;
+    let boxProps = {placeholderTextColor: '#727272',autoCorrect:false};
         return <View style={container}>
-            <TextInput style={text} defaultValue={def}></TextInput>
+            <TextInput style={text} placeholder={def} {...boxProps}></TextInput>
         </View>
-
-
-    }
 }
 
 let styles = StyleSheet.create({
@@ -26,7 +23,7 @@ let styles = StyleSheet.create({
         text: {
             fontFamily: 'Avenir-BookOblique',
             fontSize: 18,
-            color: '#808080',
+            color: '#000',
             height:40,
             marginLeft:20,
             marginRight:10

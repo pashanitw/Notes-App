@@ -18,7 +18,9 @@ import React, {
 import List from './src/List'
 import CreateNote from './src/CreateNote'
 import Slider from './src/Slider'
+import configureStore from './store/configure-store'
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+let store=configureStore();
 class Notes extends Component {
 
     _renderScene(route,navigator){

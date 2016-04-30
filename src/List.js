@@ -70,10 +70,10 @@ export default class List extends Component {
             <View style={styles.container}>
                  <Navbar routeName="NoteList"
                  navigator={this.props.navigator}/>
-                <SearchBar/>
                 <ListView
                     dataSource={this.state.dataSource}
                     renderRow={NoteItem}
+                    renderHeader={SearchBar}
                 />
 
             </View>
