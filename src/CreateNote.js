@@ -3,13 +3,16 @@
  */
 
 import React, {Component, Text, Image, StyleSheet, View, TextInput,TouchableHighlight} from 'react-native';
+import * as notelistActions from '../actions/notelist';
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
 import NavBar from './NavBar'
-export default class CreateNote extends Component {
+class CreateNote extends Component {
     constructor(props) {
         super(props)
         this.state = {
             title:'',
-            tags: '',
+            tagName: '',
             note: ''
         }
     }
@@ -19,12 +22,14 @@ export default class CreateNote extends Component {
         this.setState(newState)
     }
     _onPressButton(){
-        //SAVE TO SQL LITE ACTION GOES HERE
+        let {title,tagName,note}=this.state;
+        this.props.actions.createNewNote({title,tagName,note})
+        this.props.navigator.pop();
     }
 
     render() {
         let multiline=true;
-        let {title, tags, note}=this.state;
+        let {title, tagName, note}=this.state;
         let boxProps = {placeholderTextColor: '#727272',autoCorrect:false}
         let {container,subContainer, label, textbox, textarea, tagsView,submit,submitFont}=styles;
         return <View style={container}>
@@ -41,10 +46,10 @@ export default class CreateNote extends Component {
                 <View style={tagsView}>
                     <TextInput
                         placeholder='Enter Tag Names...'
-                        value={tags}
+                        value={tagName}
                         style={textbox}
                         {...boxProps}
-                        onChangeText={this._handleInputChange.bind(this,'tags')}>
+                        onChangeText={this._handleInputChange.bind(this,'tagName')}>
                     </TextInput>
                 </View>
                 <TextInput
@@ -55,7 +60,7 @@ export default class CreateNote extends Component {
                     multiline={multiline}
                     onChangeText={this._handleInputChange.bind(this,'note')}>
                 </TextInput>
-                <TouchableHighlight onPress={this._onPressButton} style={submit}>
+                <TouchableHighlight onPress={this._onPressButton.bind(this)} style={submit}>
                     <Text style={submitFont}>Add Note</Text>
                 </TouchableHighlight>
             </View>
@@ -113,3 +118,15 @@ let styles = StyleSheet.create({
 
 
 });
+export default connect(mapStateToProps,mapDispatchToProps)(CreateNote);
+
+function mapStateToProps(state){
+    return {
+        
+    }
+}
+function mapDispatchToProps(dispatch){
+    return {
+        actions:bindActionCreators(notelistActions, dispatch)
+    }
+}

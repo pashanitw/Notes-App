@@ -1,15 +1,17 @@
 import React,{Component,Text,Image,StyleSheet,View} from 'react-native';
+import moment from 'moment';
 const clockImg =require('../assets/ios-clock.png');
 const tagImg=require('../assets/ios-pricetag.png');
+
 
 const FooterLabel=({source,label,imgStyle,wrapperStyle})=>{
 
     return <View style={wrapperStyle?[styles.box,wrapperStyle]:styles.box}>
         <Image source={source} style={imgStyle}></Image>
-        <Text style={styles.footerLabel}>{label}</Text>
+        <Text style={styles.footerLabel}>{label.toUpperCase()}</Text>
     </View>
 }
-export const  NoteItem =({title,note,dateAdded,tagName})=>{
+export const  NoteItem =({title,note,createdAt,tagName})=>{
         let {container,titleStyle,textStyle,footer,clock,tag,rightMargin,alignStart,divider,noteSection}=styles;
         return <View style={container}>
             <View style={noteSection}>
@@ -18,7 +20,7 @@ export const  NoteItem =({title,note,dateAdded,tagName})=>{
             <Text style={textStyle}>{note}</Text>
             </View>
             <View style={footer}>
-                    <FooterLabel source={clockImg} label={dateAdded} wrapperStyle={alignStart} imgStyle={[clock,rightMargin]}/>
+                    <FooterLabel source={clockImg} label={moment(createdAt).fromNow()} wrapperStyle={alignStart} imgStyle={[clock,rightMargin]}/>
                     <FooterLabel source={tagImg} label={tagName}  imgStyle={[tag,rightMargin]}/>
             </View>
         </View>
@@ -73,12 +75,12 @@ let styles=StyleSheet.create({
         margin:1
     },
     rightMargin:{
-        marginRight:5
+        marginRight:5,
     },
     footerLabel:{
         fontFamily: 'Avenir-Roman',
         fontSize: 14,
-        color: '#727272'
+        color: '#727272',
     },
     alignStart:{
         flex:1

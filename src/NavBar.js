@@ -5,11 +5,15 @@
 import React, {Component, Text, Image, StyleSheet, View, TouchableHighlight, CreateNote} from 'react-native';
 export default class NavBar extends Component {
     _handleToggleMenu() {
-
+        if (!this.props.isMenuOpen) {
+            this.props.setMenuStatus(true)
+        }
     }
-    _handleGoBack(){
+
+    _handleGoBack() {
         this.props.navigator.pop();
     }
+
     _handleSwitchToEditScreen() {
         this.props.navigator.push({
             name: 'CreateNote'
@@ -17,13 +21,13 @@ export default class NavBar extends Component {
     }
 
     _renderIcons() {
-        let {menu, compose, menuDimensions, composeDimensions,backDimensions}=styles;
+        let {menu, compose, menuDimensions, composeDimensions, backDimensions}=styles;
         switch (this.props.routeName) {
             case 'NoteList':
                 return [
                     <TouchableHighlight
                         key="1"
-                        onPress={this._handleToggleMenu}
+                        onPress={this._handleToggleMenu.bind(this)}
                         style={menu}>
                         <Image
                             source={require('../assets/navicon.png')}
@@ -86,10 +90,10 @@ let styles = StyleSheet.create({
         width: 28,
         height: 27
     },
-    backDimensions:{
-        width:27,
-        height:27,
-        marginTop:-2
+    backDimensions: {
+        width: 27,
+        height: 27,
+        marginTop: -2
     }
 
 });
