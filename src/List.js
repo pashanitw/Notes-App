@@ -15,7 +15,6 @@ import React, {
     TextInput
 } from 'react-native';
 import Navbar from './NavBar';
-import  SearchBar from './SearchBar'
 import  Slider from './Slider'
 import  {NoteItem} from './NoteItem'
 import SideMenu from 'react-native-side-menu'
@@ -39,11 +38,14 @@ class List extends Component {
         super(props);
         this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.dataSource = this.ds.cloneWithRows([])
+        this.state = {
+            searchText: ''
+        }
 
     }
 
-    _filterByTitle(text) {
-        return this.state.data.filter(note=>note.title.startsWith(text));
+    _filterByTitle(data) {
+        return this._mapDataSource(data).filter(note=>note.title.startsWith(this.state.searchText) || note.tagName.startsWith(this.state.searchText) );
 
     }
 
@@ -75,6 +77,27 @@ class List extends Component {
         }
     }
 
+    _updateSearch(searchText) {
+        this.setState({
+            searchText
+        })
+
+    }
+
+    _searchBar() {
+        var def = "Search by title or tag..."
+        let {searchWrapper, searchText}=styles;
+        let boxProps = {placeholderTextColor: '#727272', autoCorrect: false};
+        return <View style={searchWrapper}>
+            <TextInput style={searchText}
+                       placeholder={def}
+                {...boxProps}
+                       onChangeText={this._updateSearch.bind(this)}
+                       value={this.state.searchText}>
+            </TextInput>
+        </View>
+    }
+
     render() {
         let autoCorrect = false;
         let enableEmptySections = true;
@@ -82,9 +105,10 @@ class List extends Component {
         let edgeHitWidth = 170;
         let bounceBackOnOverdraw = false;
         var Menu = <Slider navigator={this.props.navigator}></Slider>;
-        let mappedData=this._mapDataSource(this.props.data);
-        let sortedData=this._sortByDate(mappedData)
-        let dataSource = this.ds.cloneWithRows(sortedData);
+        let mappedData = this._mapDataSource(this.props.data);
+        let sortedData = this._sortByDate(mappedData)
+        let filteredData=this._filterByTitle(sortedData)
+        let dataSource = this.ds.cloneWithRows(filteredData);
         return (
             <SideMenu
                 menu={Menu}
@@ -100,7 +124,7 @@ class List extends Component {
                     <ListView
                         dataSource={dataSource}
                         renderRow={NoteItem}
-                        renderHeader={SearchBar}
+                        renderHeader={this._searchBar.bind(this)}
                         enableEmptySections={enableEmptySections}
                     />
                 </View>
@@ -110,7 +134,20 @@ class List extends Component {
 }
 
 const styles = StyleSheet.create({
-
+    searchWrapper: {
+        height: 40,
+        borderRadius: 22,
+        backgroundColor: '#D8D8D8',
+        margin: 18
+    },
+    searchText: {
+        fontFamily: 'Avenir-BookOblique',
+        fontSize: 18,
+        color: '#000',
+        height: 40,
+        marginLeft: 20,
+        marginRight: 10
+    },
     container: {
         flex: 1,
         flexDirection: 'column',
@@ -168,9 +205,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(List)
 
 
 function mapStateToProps(state) {
-    console.log(state)
     let {notelist}=state;
-    console.log('notelist is', notelist)
     return {
         isMenuOpen: notelist.get('isMenuOpen'),
         searchKey: notelist.get('searchKey'),
