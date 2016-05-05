@@ -13,15 +13,18 @@ import React, {
     Image,
     ListView,
     TextInput,
-    Navigator
+    Navigator,
+    AsyncStorage
 } from 'react-native';
 import List from './src/List'
 import CreateNote from './src/CreateNote'
-import Slider from './src/Slider'
 import {Provider} from 'react-redux';
 import configureStore from './store/configure-store'
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+import {loadInitialData} from './actions/notelist'
+import Login from './src/Login'
 let store = configureStore();
+
 class Notes extends Component {
 
     _renderScene(route, navigator) {
@@ -31,13 +34,30 @@ class Notes extends Component {
                 return <List navigator={navigator} store={store}/>
             case 'CreateNote':
                 return <CreateNote navigator={navigator} store={store}/>
+            case 'Login':
+                return <Login navigator={navigator}></Login>
         }
     }
 
     _getInitialRoute() {
         return {
-            name: 'NoteList'
+            name: 'Login'
         }
+    }
+    componentDidMount(){
+        AsyncStorage.getItem('notelist',(err,result)=>{
+            console.log('result is',result);
+            if(err){
+                console.log('error is occured')
+            }else{
+                if(!result){
+                    AsyncStorage.setItem('notelist',JSON.stringify({}))
+                        .then(()=>console.log('item saved'))
+                }else{
+                    store.dispatch(loadInitialData(JSON.parse(result)))
+                }
+            }
+        })
     }
 
     render() {
@@ -59,12 +79,11 @@ const styles = StyleSheet.create({
     container: {
         position: 'absolute',
         flex: 1,
-        top:0,
+        top: 30,
         left: 0,
         bottom: 0,
         right: 0,
         backgroundColor: '#BDC3C7',
     }
 });
-
 AppRegistry.registerComponent('Notes', () => Notes);
