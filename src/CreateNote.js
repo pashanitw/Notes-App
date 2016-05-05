@@ -2,7 +2,15 @@
  * Created by space on 4/28/16.
  */
 
-import React, {Component, Text, Image, StyleSheet, View, TextInput,TouchableHighlight} from 'react-native';
+import React, {
+    Component,
+    Text,
+    Image,
+    StyleSheet,
+    View,
+    TextInput,
+    TouchableHighlight
+} from 'react-native';
 import * as notelistActions from '../actions/notelist';
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
@@ -11,27 +19,29 @@ class CreateNote extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            title:'',
+            title: '',
             tagName: '',
             note: ''
         }
     }
-    _handleInputChange(type,text){
-        let newState={};
-        newState[type]=text;
+
+    _handleInputChange(type, text) {
+        let newState = {};
+        newState[type] = text;
         this.setState(newState)
     }
-    _onPressButton(){
-        let {title,tagName,note}=this.state;
-        this.props.actions.createNewNote({title,tagName,note})
+
+    _onPressButton() {
+        let {title, tagName, note}=this.state;
+        this.props.actions.createNewNote({title, tagName, note})
         this.props.navigator.pop();
     }
 
     render() {
-        let multiline=true;
+        let multiline = true;
         let {title, tagName, note}=this.state;
-        let boxProps = {placeholderTextColor: '#727272',autoCorrect:false}
-        let {container,subContainer, label, textbox, textarea, tagsView,submit,submitFont}=styles;
+        let boxProps = {placeholderTextColor: '#727272', autoCorrect: false}
+        let {container, subContainer, label, textbox, textarea, tagsView, submit, submitFont}=styles;
         return <View style={container}>
             <NavBar routeName='CreateNote' navigator={this.props.navigator}/>
             <View style={subContainer}>
@@ -69,8 +79,8 @@ class CreateNote extends Component {
 }
 
 let styles = StyleSheet.create({
-    container:{
-      flex:1
+    container: {
+        flex: 1
     },
     subContainer: {
         flex: 1,
@@ -99,34 +109,32 @@ let styles = StyleSheet.create({
     textarea: {
         height: 150
     },
-    submit:{
+    submit: {
         backgroundColor: '#384252',
         borderRadius: 4,
-        padding:16,
-        position:'absolute',
-        bottom:10,
-        right:10,
-        left:10
+        padding: 16,
+        position: 'absolute',
+        bottom: 10,
+        right: 10,
+        left: 10
 
     },
-    submitFont:{
+    submitFont: {
         fontFamily: 'Avenir-Roman',
         fontSize: 20,
         color: '#FFFFFF',
-        textAlign:'center'
+        textAlign: 'center'
     }
 
 
 });
-export default connect(mapStateToProps,mapDispatchToProps)(CreateNote);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateNote);
 
-function mapStateToProps(state){
-    return {
-        
-    }
+function mapStateToProps(state) {
+    return {}
 }
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
     return {
-        actions:bindActionCreators(notelistActions, dispatch)
+        actions: bindActionCreators(notelistActions, dispatch)
     }
 }
