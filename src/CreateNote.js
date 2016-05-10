@@ -101,7 +101,7 @@ let styles = StyleSheet.create({
         height: 40,
         fontFamily: 'Avenir-BookOblique',
         fontSize: 16,
-        color: '#727272',
+        color: '#000',
         backgroundColor: '#FFF',
         marginBottom: 25,
         padding: 10,

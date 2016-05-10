@@ -39,7 +39,6 @@ let styles = StyleSheet.create({
     container: {
         flex: 1,
         width: 170,
-        /* Rectangle 10: */
         backgroundColor: '#2C3E50',
         flexDirection: 'column',
         alignItems: 'center',
@@ -54,7 +53,8 @@ let styles = StyleSheet.create({
         fontFamily: 'Avenir-Roman',
         fontSize: 18,
         color: '#FFFFFF',
-        marginTop: 15
+        marginTop: 15,
+        textAlign:'center'
     },
     navigation: {
         alignItems: 'center',

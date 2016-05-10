@@ -1,8 +1,11 @@
-/**
- * Created by space on 4/28/16.
- */
-
-import React, {Component, Text, Image, StyleSheet, View, TouchableHighlight, CreateNote} from 'react-native';
+import React, 
+{
+    Component, 
+    Text, Image, 
+    StyleSheet, View, 
+    TouchableHighlight, 
+    CreateNote
+} from 'react-native';
 export default class NavBar extends Component {
     _handleToggleMenu() {
         if (!this.props.isMenuOpen) {
@@ -21,30 +24,50 @@ export default class NavBar extends Component {
     }
 
     _renderIcons() {
-        let {menu, compose, menuDimensions, composeDimensions, backDimensions}=styles;
+        let {
+            menuButton,
+            composeButton,
+            menuButtonDimensions,
+            composeButtonDimensions,
+            backButtonDimensions
+        }=styles;
+        let commonProps = {
+            underlayColor: '#2ECC71',
+            activeOpacity: 0.5
+        }
         switch (this.props.routeName) {
             case 'NoteList':
                 return [
                     <TouchableHighlight
                         key="1"
-                        onPress={this._handleToggleMenu.bind(this)}
-                        style={menu}>
+                        style={menuButton}
+                        {...commonProps}
+                        onPress={this._handleToggleMenu.bind(this)}>
                         <Image
+                            style={menuButtonDimensions}
                             source={require('../assets/navicon.png')}
-                            style={menuDimensions}/>
+                        />
                     </TouchableHighlight>,
                     <TouchableHighlight
                         key="2"
-                        onPress={this._handleSwitchToEditScreen.bind(this)}
-                        style={compose}>
+                        style={composeButton}
+                        {...commonProps}
+                        onPress={this._handleSwitchToEditScreen.bind(this)}>
                         <Image
                             source={require('../assets/ios-compose.png')}
-                            style={composeDimensions}/>
+                            style={composeButtonDimensions}
+                        />
                     </TouchableHighlight>
                 ]
             case 'CreateNote':
-                return <TouchableHighlight onPress={this._handleGoBack.bind(this)} style={menu}>
-                    <Image source={require('../assets/back.png')} style={backDimensions}/>
+                return <TouchableHighlight
+                    style={menuButton}
+                    {...commonProps}
+                    onPress={this._handleGoBack.bind(this)}>
+                    <Image
+                        style={backButtonDimensions}
+                        source={require('../assets/back.png')}
+                    />
                 </TouchableHighlight>
         }
 
@@ -72,25 +95,25 @@ let styles = StyleSheet.create({
         fontFamily: 'AvenirNext-BoldItalic',
         textAlign: 'center'
     },
-    menu: {
+    menuButton: {
         top: 15,
         left: 13,
         position: 'absolute'
     },
-    menuDimensions: {
+    menuButtonDimensions: {
         width: 30,
         height: 21,
     },
-    compose: {
+    composeButton: {
         position: 'absolute',
         top: 10,
-        right: 10
+        right: 10,
     },
-    composeDimensions: {
+    composeButtonDimensions: {
         width: 28,
         height: 27
     },
-    backDimensions: {
+    backButtonDimensions: {
         width: 27,
         height: 27,
         marginTop: -2

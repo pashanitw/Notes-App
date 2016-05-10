@@ -23,14 +23,6 @@ import {bindActionCreators} from 'redux'
 import _ from 'lodash'
 import * as notelistActions from '../actions/notelist'
 import moment from 'moment'
-const Note = ({title, note, url})=> {
-    return <View style={styles.note}>
-        <Text>{title}</Text>
-        <Text>{note}</Text>
-        <Image source={{uri: url}} style={styles.img}/>
-    </View>
-
-};
 
 
 class List extends Component {
@@ -63,14 +55,6 @@ class List extends Component {
         })
     }
 
-    _handleChange(text) {
-
-    }
-
-    updateMenuState(isOpen) {
-        this.props.actions.openMenu(isOpen)
-    }
-
     _handleMenuChange(isMenuOpen) {
         if (isMenuOpen !== this.props.isMenuOpen) {
             this.props.actions.setMenuStatus(isMenuOpen)
@@ -98,20 +82,21 @@ class List extends Component {
         </View>
     }
 
+    _renderSideMenu(navigator){
+        return <Slider navigator={navigator}></Slider>;
+    }
+
     render() {
-        let autoCorrect = false;
-        let enableEmptySections = true;
-        let {statusbar, menu}=styles;
-        let edgeHitWidth = 170;
-        let bounceBackOnOverdraw = false;
-        var Menu = <Slider navigator={this.props.navigator}></Slider>;
-        let mappedData = this._mapDataSource(this.props.data);
+        let enableEmptySections = true
+        let edgeHitWidth = 170
+        let bounceBackOnOverdraw = false
+        let mappedData = this._mapDataSource(this.props.data)
         let sortedData = this._sortByDate(mappedData)
         let filteredData=this._filterByTitle(sortedData)
-        let dataSource = this.ds.cloneWithRows(filteredData);
+        let dataSource = this.ds.cloneWithRows(filteredData)
         return (
             <SideMenu
-                menu={Menu}
+                menu={this._renderSideMenu(this.props.navigator)}
                 openMenuOffset={edgeHitWidth}
                 isOpen={this.props.isMenuOpen}
                 onChange={(isMenuOpen)=>this._handleMenuChange(isMenuOpen)}
@@ -153,51 +138,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         backgroundColor: '#BDC3C7'
 
-    },
-    menu: {
-        width: 30,
-        height: 21,
-        top: 15,
-        left: 10,
-        position: 'absolute'
-    },
-    statusbar: {
-        flex: 1,
-        backgroundColor: '#2ECC71',
-        fontSize: 36,
-        color: '#FFFFFF',
-        fontFamily: 'AvenirNext-BoldItalic',
-        textAlign: 'center'
-    },
-    searchBar: {
-        flex: 1,
-        height: 50,
-        borderColor: "#DDD",
-        borderWidth: 1,
-        backgroundColor: '#eee'
-    },
-    listView: {
-        position: 'absolute',
-        top: 80
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
-    img: {
-        width: 300,
-        height: 200
-    },
-    note: {
-        borderWidth: 1,
-        borderColor: '#000',
-        marginBottom: 5
     }
 });
 

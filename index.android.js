@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, {
     AppRegistry,
     Component,
@@ -26,9 +20,14 @@ import Login from './src/Login'
 let store = configureStore();
 
 class Notes extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            initialRoute: null
+        }
+    }
 
     _renderScene(route, navigator) {
-        console.log('state is', store.getState())
         switch (route.name) {
             case 'NoteList':
                 return <List navigator={navigator} store={store}/>
@@ -39,37 +38,55 @@ class Notes extends Component {
         }
     }
 
-    _getInitialRoute() {
-        return {
-            name: 'Login'
-        }
-    }
-    componentDidMount(){
-        AsyncStorage.getItem('notelist',(err,result)=>{
-            console.log('result is',result);
-            if(err){
-                console.log('error is occured')
-            }else{
-                if(!result){
-                    AsyncStorage.setItem('notelist',JSON.stringify({}))
-                        .then(()=>console.log('item saved'))
-                }else{
-                    store.dispatch(loadInitialData(JSON.parse(result)))
+
+    componentDidMount() {
+        AsyncStorage.getItem('username')
+            .then((username)=> {
+                if (username) {
+                    this.setState({
+                        initialRoute:{
+                            name: 'NoteList'
+                        }
+                    })
+                    this.initialRoute =
+                        AsyncStorage.getItem('notelist', (err, result)=> {
+                            if (err) {
+                                console.log('error is '+err)
+                            } else {
+                                store.dispatch(loadInitialData(username, JSON.parse(result)))
+
+                            }
+                        })
                 }
-            }
-        })
+                else {
+                    AsyncStorage.setItem('notelist', JSON.stringify({}))
+                        .then(()=> {
+                            this.setState({
+                                initialRoute:{
+                                    name: 'Login'
+                                }
+                            })
+                        })
+                }
+            })
+
     }
 
     render() {
-        let autoCorrect = false;
-        let enableEmptySections = true;
-        let {statusbar, menu}=styles;
         return (
+
             <Provider store={store}>
-                <Navigator style={styles.container}
-                           initialRoute={this._getInitialRoute()}
-                           renderScene={this._renderScene}>
-                </Navigator>
+                {
+                    this.state.initialRoute ?
+                        <Navigator style={styles.container}
+                                   initialRoute={this.state.initialRoute}
+                                   renderScene={this._renderScene}>
+                        </Navigator>
+                        :
+                        <View>
+                            <Text>...Loading</Text>
+                        </View>
+                }
             </Provider>
         );
     }
@@ -79,7 +96,7 @@ const styles = StyleSheet.create({
     container: {
         position: 'absolute',
         flex: 1,
-        top: 30,
+        top: 0,
         left: 0,
         bottom: 0,
         right: 0,

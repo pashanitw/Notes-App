@@ -6,7 +6,7 @@ export const SET_MENU_STATUS = 'SET_MENU_STATUS'
 export const LOAD_INITAL_DATA = 'LOAD_INITAL_DATA'
 export const CREATE_NEW_NOTE = 'CREATE_NEW_NOTE'
 export const SET_USER_NAME = 'SET_USER_NAME'
-export const CLEAR_DATA='CLEAR_DATA'
+export const CLEAR_DATA = 'CLEAR_DATA'
 
 
 export const searchNote = (searchKey)=> {
@@ -22,10 +22,11 @@ export const setMenuStatus = (status)=> {
         status: status
     }
 };
-export const loadInitialData = (data)=> {
+export const loadInitialData = (username, data)=> {
     return {
         type: LOAD_INITAL_DATA,
-        data: data
+        username,
+        data
     }
 };
 export const createNewNote = (data)=> {
@@ -42,30 +43,27 @@ export const createNewNote = (data)=> {
                     data: note
                 })
             })
-            .catch(()=>console.log("error occured"))
     }
 };
 export const setUsername = (username, navigator)=> {
-    return function (dispatch) {
-        AsyncStorage.clear()
+    return (dispatch)=> {
+        AsyncStorage.setItem('username', username)
             .then(()=> {
-                AsyncStorage.setItem('username', username)
-                    .then(()=> {
-                        dispatch({
-                            type: SET_USER_NAME,
-                            username
-                        })
-                        navigator.push({
-                            name: 'NoteList'
-                        })
-                    })
-                    .catch((err)=>console.log('error occured ' + err))
+                dispatch({
+                    type: SET_USER_NAME,
+                    username
+                })
+                navigator.push({
+                    name: 'NoteList'
+                })
             })
-
     }
 }
-export const clearData=()=>{
-    return {
-       type:CLEAR_DATA
+export const clearData = ()=> {
+    return (dispatch)=> {
+        AsyncStorage.clear()
+            .then(()=>dispatch({
+                type: CLEAR_DATA
+            }))
     }
 }

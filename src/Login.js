@@ -1,7 +1,3 @@
-/**
- * Created by space on 4/28/16.
- */
-
 import React, {
     Component,
     TextInput,
@@ -9,7 +5,8 @@ import React, {
     Image,
     StyleSheet,
     View,
-    TouchableHighlight
+    TouchableHighlight,
+    TouchableOpacity
 } from 'react-native';
 import {setUsername} from '../actions/notelist'
 import {connect} from 'react-redux'
@@ -18,7 +15,8 @@ class Login extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            username: ''
+            username: '',
+            isUserNameEmpty:true
         }
     }
 
@@ -30,8 +28,10 @@ class Login extends Component {
     }
 
     _updateText(username) {
+        let isUserNameEmpty=username ? false:true
         this.setState({
-            username
+            username,
+            isUserNameEmpty
         })
     }
 
@@ -46,7 +46,8 @@ class Login extends Component {
             </TextInput>
             <TouchableHighlight
                 onPress={this._handleLogin.bind(this)}
-                style={buttonWrapper}>
+                style={[buttonWrapper,{opacity:this.state.isUserNameEmpty?0.5:1}]}
+                disabled={this.state.isUserNameEmpty}>
                 <Text style={loginButton}>Login As Guest</Text>
             </TouchableHighlight>
         </View>
@@ -63,7 +64,8 @@ let styles = StyleSheet.create({
         height: 40,
         borderWidth: 1,
         borderColor: '#000',
-        margin:20
+        margin:20,
+        paddingLeft:20
     },
     loginButton: {
         fontFamily: 'Avenir-Roman',
