@@ -63,7 +63,7 @@ class Notes extends Component {
                         .then(()=> {
                             this.setState({
                                 initialRoute:{
-                                    name: 'Login'
+                                    name:'Login'
                                 }
                             })
                         })
@@ -83,8 +83,8 @@ class Notes extends Component {
                                    renderScene={this._renderScene}>
                         </Navigator>
                         :
-                        <View>
-                            <Text>...Loading</Text>
+                        <View style={[styles.container,styles.loadingScreen]}>
+                            <Text style={styles.loadingText}>Loading...</Text>
                         </View>
                 }
             </Provider>
@@ -101,6 +101,13 @@ const styles = StyleSheet.create({
         bottom: 0,
         right: 0,
         backgroundColor: '#BDC3C7',
+    },
+    loadingScreen:{
+        alignItems:'center',
+        justifyContent:'center'
+    },
+    loadingText:{
+        fontSize:50
     }
 });
 AppRegistry.registerComponent('Notes', () => Notes);
